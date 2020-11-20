@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint frontend
+    name: npm lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

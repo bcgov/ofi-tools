@@ -1,6 +1,6 @@
 <template>
   <div id="main" class="body">
-    <h1>Packaged Product: {{ state.packName }}</h1>
+    <h1>Packaged Product: &nbsp; {{ state.packName }}</h1>
     <div class="main-background">
       <strong style="font-size: 15px"
         >Email address where order notifications will be sent.
@@ -31,6 +31,7 @@
               background-color: transparent;
             "
             v-model="state.emailAddress"
+            @focus="focusEmail"
           />
           <div style="margin-top: 40px">
             <input type="checkbox" v-model="state.condChecked" />
@@ -63,9 +64,32 @@
               Data@gov.bc.ca, PO BOX 9864 STN PROV GOVT, Victoria BC V8W 9T5
             </div>
           </div>
-          <!-- <div>{{state.emailAddress}}</div> -->
-          <div style="margin-top: 40px">
-            <a class="myButton" @click="clickSubmit">Submit Order</a>
+          <table>
+            <tr style="height: 80px">
+              <td>
+                <a class="order-button" @click="clickSubmit">Submit Order</a>
+              </td>
+              <td>
+                <a style="margin-left: 20px" v-if="this.state.APILoading">
+                  <i
+                    style="color: #566963"
+                    class="fa fa-refresh fa-spin fa-3x fa-fw"
+                  ></i>
+                </a>
+              </td>
+            </tr>
+          </table>
+          <div
+            v-if="state.APISucc"
+            class="bc-geocoder typeahead tt-query resp-ok-text"
+          >
+            <div style="margin-top: 10px">{{ state.ResponseText }}</div>
+          </div>
+          <div
+            v-if="state.APIFail"
+            class="bc-geocoder typeahead tt-query resp-bad-text"
+          >
+            <div style="margin-top: 10px">{{ state.ResponseError }}</div>
           </div>
         </span>
       </div>
@@ -77,15 +101,26 @@
 <script>
 import axios from "axios";
 import config from "../../vue.config";
+// "MikeDW folder test" "MikeDW flat file test"
 
 export default {
   name: "Vidget",
   data: function () {
+    const OFI_Url = config.pluginOptions.API_OFI_ROOT;
+    const CreateOrderFilteredSM =
+      OFI_Url + config.pluginOptions.CreateOrderFilteredSM;
+    const CreateOrderFiltered =
+      OFI_Url + config.pluginOptions.CreateOrderFiltered;
+
     var state = {
-      packName: "Default Package",
+      packName: null,
       showCond: false,
       condChecked: true,
-      emailAddress: "gary.sun@gov.bc.ca",
+      emailAddress: null,
+      APISucc: false,
+      APIFail: false,
+      ResponseError: null,
+      APILoading: false,
     };
     const urlParams = new URLSearchParams(window.location.search);
     var urlPackageName = urlParams.get("PackageName");
@@ -93,11 +128,19 @@ export default {
       state.packName = urlPackageName;
     }
 
-    return { state };
+    return {
+      state,
+      CreateOrderFilteredSM,
+      CreateOrderFiltered,
+    };
   },
   methods: {
     clickCond: function () {
       this.state.showCond = !this.state.showCond;
+    },
+
+    focusEmail: function () {
+      this.state.APIFail = false;
     },
 
     isEmailValid: function () {
@@ -107,33 +150,59 @@ export default {
         : reg.test(this.state.emailAddress);
     },
 
-    clickSubmit: function () {
+    clickSubmit() {
+      this.state.APIFail = false;
       if (!this.state.condChecked) {
-        alert("You must agree to the conditions.");
+        this.state.ResponseError = "You must agree to the conditions.";
+        this.state.APIFail = true;
       } else if (!this.isEmailValid()) {
-        alert("Email is not valid.");
+        this.state.ResponseError = "Email is not valid.";
+        this.state.APIFail = true;
+      } else if (this.state.packName == null || this.state.packName == "") {
+        this.state.ResponseError = "Package name is not valid.";
+        this.state.APIFail = true;
       } else {
-        this.createOrderFilteredSM(this.emailAddress);
+        this.createOrderFilteredSM(
+          this.state.emailAddress,
+          this.state.packName
+        );
       }
     },
 
-    createOrderFilteredSM: function (email) {
-      let OFI_Url = config.pluginOptions.API_OFI_ROOT;
-      let CreateOrderFilteredSM = config.pluginOptions.CreateOrderFilteredSM;
-
-      return axios
-        .post(OFI_Url + CreateOrderFilteredSM, {
-          body: email,
+    createOrderFilteredSM() {
+      this.state.APILoading = true;
+      axios({
+        method: "post",
+        url: this.CreateOrderFilteredSM,
+        data: {
+          emailAddress: this.state.emailAddress,
+          aoiType: "0",
+          aoi: "",
+          orderingApplication: "BCDC",
+          crsType: "0",
+          clippingMethodType: "1",
+          formatType: "0",
+          useAOIBounds: "",
+          prepackagedItems: this.state.packName,
+          aoiName: "",
+          filterValue: "",
+          filterType: "No Filter",
+          pctOfMax: 5,
+        },
+      })
+        .then((response) => {
+          if (response.status == 200) {
+            window.location = this.CreateOrderFiltered + response.data;
+          } else {
+            this.state.ResponseError =
+              "Calling API Failed. Status Code: " + response.status;
+            this.state.APIFail = true;
+          }
         })
-        .then((response) =>
-          alert(
-            "Well done. data:" +
-              response.data +
-              ", stauts: " +
-              response.statusText
-          )
-        )
-        .catch((error) => alert("Oops, " + error));
+        .catch((error) => {
+          this.state.ResponseError = error.message;
+          this.state.APIFail = true;
+        });
     },
   },
 };

@@ -1,0 +1,20 @@
+name: Run linter
+
+on:
+  push:
+    branches: [dev, master]
+  pull_request:
+    branches: [dev, master]
+
+jobs:
+  lint:
+    name: Lint frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: npm install
+        run: npm install
+
+      - name: lint
+        run: npm run lint

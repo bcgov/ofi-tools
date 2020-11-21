@@ -18,8 +18,7 @@ jobs:
 
       - name: lint
         run: |
-          npm run lint >> lint.txt
-          echo "LINT_RESULTS=$(cat lint.txt)" >> $GITHUB_ENV
+          export LINT_RESULTS=`npm run lint`
           #test
           echo ${{ env.LINT_RESULTS }}
 

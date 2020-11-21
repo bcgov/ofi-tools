@@ -18,9 +18,9 @@ jobs:
 
       - name: lint
         run: |
-          npm run lint >> lint.txt
+          npm run lint | ${{ github.workspace }}/lint.txt
           pwd
-          cat /home/runner/work/ofi-tools/ofi-tools/lint.txt >> ${{ env.LINT_RESULTS }}
+          cat ${{ github.workspace }}/lint.txt >> ${{ env.LINT_RESULTS }}
           #test
           echo ${{ env.LINT_RESULTS }}
 

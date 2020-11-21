@@ -1,0 +1,21 @@
+name: Run linter
+
+on:
+  pull_request:
+    branches: [dev, master]
+
+jobs:
+  lint:
+    name: npm lint
+    env:
+      LINT_RESULTS: "No lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: npm install
+        run: npm install
+
+      - name: lint
+        run: |
+          npm run lint 

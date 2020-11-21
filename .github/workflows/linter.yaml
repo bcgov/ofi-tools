@@ -18,7 +18,8 @@ jobs:
 
       - name: lint
         run: |
-          export LINT_RESULTS=`npm run lint`
+          npm run lint >> lint.txt
+          echo "LINT_RESULTS=$(cat lint.txt)" >> $GITHUB_ENV
           #test
           echo ${{ env.LINT_RESULTS }}
 
@@ -30,5 +31,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: ${{ env.LINT_RESULTS }}
+              body: `${{ env.LINT_RESULTS }}`
             })

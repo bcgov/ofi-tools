@@ -20,7 +20,7 @@ jobs:
         run: |
           npm run lint >> lint.txt
           pwd
-          cat ./lint.txt >> ${{ env.LINT_RESULTS }}
+          cat /home/runner/work/ofi-tools/ofi-tools/lint.txt >> ${{ env.LINT_RESULTS }}
           #test
           echo ${{ env.LINT_RESULTS }}
 

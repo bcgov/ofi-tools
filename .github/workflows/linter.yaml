@@ -19,7 +19,8 @@ jobs:
       - name: lint
         run: |
           npm run lint >> lint.txt
-          cat lint.txt >> ${{ env.LINT_RESULTS }}
+          pwd
+          cat ./lint.txt >> ${{ env.LINT_RESULTS }}
           #test
           echo ${{ env.LINT_RESULTS }}
 

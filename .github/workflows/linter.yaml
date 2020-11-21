@@ -18,7 +18,7 @@ jobs:
 
       - name: lint
         run: |
-          echo "LINT_RESULTS=$(npm run lint)" >> $GITHUB_ENV
+          export LINT_RESULTS=`npm run lint`
 
       - uses: actions/github-script@v3
         with:

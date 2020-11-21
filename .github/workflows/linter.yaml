@@ -18,7 +18,8 @@ jobs:
 
       - name: lint
         run: |
-          export LINT_RESULTS=`npm run lint`
+          npm run lint >> lint.txt
+          cat lint.txt >> ${{ env.LINT_RESULTS }}
           #test
           echo ${{ env.LINT_RESULTS }}
 

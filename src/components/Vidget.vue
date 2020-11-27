@@ -5,6 +5,7 @@
       <strong style="font-size: 15px"
         >Email address where order notifications will be sent.
       </strong>
+      <form v-on:submit.prevent="clickSubmit">
       <div class="spacer" style="margin-left: 0">
         <span
           class="twitter-typeahead"
@@ -20,7 +21,8 @@
           <input
             type="text"
             class="bc-geocoder typeahead tt-query"
-            autocomplete="off"
+            name="emailAddress"
+            autocomplete="on"
             placeholder="someone@gov.bc.ca"
             x-webkit-speech=""
             spellcheck="false"
@@ -67,7 +69,7 @@
           <table>
             <tr style="height: 80px">
               <td>
-                <a class="order-button" @click="clickSubmit">Submit Order</a>
+                <input type="submit" class="order-button" value="Submit Order" >
               </td>
               <td>
                 <a style="margin-left: 20px" v-if="this.state.APILoading">
@@ -93,6 +95,7 @@
           </div>
         </span>
       </div>
+      </form>
     </div>
   </div>
 </template>
@@ -123,7 +126,7 @@ export default {
       APILoading: false,
     };
     const urlParams = new URLSearchParams(window.location.search);
-    var urlPackageName = urlParams.get("PackageName");
+    var urlPackageName = urlParams.get("packagename");
     if (urlPackageName != null && urlPackageName != "") {
       state.packName = urlPackageName;
     }

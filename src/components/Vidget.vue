@@ -23,7 +23,7 @@
             class="bc-geocoder typeahead tt-query"
             name="emailAddress"
             autocomplete="on"
-            placeholder="someone@gov.bc.ca"
+            placeholder="yourname@youraddress.ext"
             x-webkit-speech=""
             spellcheck="false"
             dir="auto"
@@ -118,7 +118,7 @@ export default {
     var state = {
       packName: null,
       showCond: false,
-      condChecked: true,
+      condChecked: false,
       emailAddress: null,
       APISucc: false,
       APIFail: false,

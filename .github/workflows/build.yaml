@@ -20,9 +20,9 @@ jobs:
       - name: Webhook Dev
         if: ${{ github.ref == 'refs/heads/dev' }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{ \"repository\": \"${{github.event.repository.full_name}}\", \"number\": \"${{github.event.number}}\", \"created_at\": \"${{github.event.pull_request.created_at}}\", \"updated_at\": \"${{github.event.pull_request.updated_at}}\", \"commit\": \"$GITHUB_SHA\" }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-dev-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.DEV_PIPE_TOKEN }}/generic
+          curl -X POST -H "Content-Type: application/json" -d '{ \"repository\": \"${{github.event.repository.full_name}}\", \"commit\": \"${{github.sha}}\" }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-dev-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.DEV_PIPE_TOKEN }}/generic
       
       - name: Webhook Test
         if: ${{ github.ref == 'refs/heads/master' }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{ \"repository\": \"${{github.event.repository.full_name}}\", \"number\": \"${{github.event.number}}\", \"created_at\": \"${{github.event.pull_request.created_at}}\", \"updated_at\": \"${{github.event.pull_request.updated_at}}\", \"commit\": \"$GITHUB_SHA\" }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-test-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.TEST_PIPE_TOKEN }}/generic
+          curl -X POST -H "Content-Type: application/json" -d '{ \"repository\": \"${{github.event.repository.full_name}}\", \"commit\": \"${{github.sha}}\" }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-test-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.TEST_PIPE_TOKEN }}/generic

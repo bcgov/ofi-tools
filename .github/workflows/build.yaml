@@ -17,6 +17,7 @@ jobs:
           registry: docker.pkg.github.com
           repository: bcgov/ofi-tools/ofi-tools
           tag_with_ref: true
+          tag_with_sha: true
       - name: Webhook Dev
         if: ${{ github.ref == 'refs/heads/dev' }}
         run: |

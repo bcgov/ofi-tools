@@ -19,14 +19,14 @@ jobs:
           tag_with_ref: true
       - name: WebhookTest
         if: ${{ github.ref == 'refs/heads/master' }}
-        uses: distributhor/workflow-webhook
+        uses: distributhor/workflow-webhook@v1
         with:
           url: "https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-dev-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.DEV_PIPE_TOKEN }}/generic"
           json: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}", "commit": "$GITHUB_SHA" }'
       
       - name: WebhookDev
         if: ${{ github.ref == 'refs/heads/dev' }}
-        uses: distributhor/workflow-webhook
+        uses: distributhor/workflow-webhook@v1
         with:
           url: "https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-test-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.TEST_PIPE_TOKEN }}/generic"
           json: '{ "repository": "${{github.event.repository.full_name}}", "number": "${{github.event.number}}", "created_at": "${{github.event.pull_request.created_at}}", "updated_at": "${{github.event.pull_request.updated_at}}", "commit": "$GITHUB_SHA" }'

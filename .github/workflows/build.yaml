@@ -10,11 +10,12 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Push to GitHub Packages
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v1
         with:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
+          repository: bcgov/ofi-tools/ofi-tools
           tag_with_ref: true
       - name: WebhookTest
         if: ${{ github.ref == 'refs/heads/master' }}

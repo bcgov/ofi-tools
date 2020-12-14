@@ -18,6 +18,7 @@ COPY --from=build-stage /app/dist /app
 RUN chmod 777 /app
 RUN chmod 777 /app/js
 RUN mv /app/js/app*.js /tmp/
+RUN chmod 777 /tmp/*
 
 ENV NODE_ENV "production"
 

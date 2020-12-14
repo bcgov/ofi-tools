@@ -1,0 +1,9 @@
+*:8080 {
+    root /app
+    errors visible
+    #rewrite not /api/.* {path} /
+
+    rewrite {
+        to {path} /
+    }
+}

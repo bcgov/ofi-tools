@@ -1,6 +1,8 @@
 #!/bin/sh
 JSON_STRING=".VUE_APP_OFI_ROOT:\"${VUE_APP_OFI_ROOT}\";"
-sed -i "s@.VUE_APP_OFI_ROOT:\"https://delivery.apps.gov.bc.ca/pub/dwds-ofi/\";@${JSON_STRING}@" /tmp/app*.js
-cp -rf /tmp/app*.js /app/js/
+for file in $(ls ./.github);
+  do export $FILENAME="${file##*/}";
+done
+sed "s@.VUE_APP_OFI_ROOT:\"https://delivery.apps.gov.bc.ca/pub/dwds-ofi/\";@${JSON_STRING}@" /tmp/app*.js > /app/js/$FILENAME
 cd /etc
 caddy 

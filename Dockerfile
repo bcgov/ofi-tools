@@ -15,6 +15,7 @@ FROM abiosoft/caddy:1.0.0-no-stats
 
 WORKDIR /app
 COPY --from=build-stage /app/dist /app
+RUN chmod 777 /app
 
 ENV NODE_ENV "production"
 

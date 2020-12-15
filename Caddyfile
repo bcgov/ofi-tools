@@ -1,9 +1,11 @@
 *:8080 {
     root /app
     errors visible
-    #rewrite not /api/.* {path} /
-
+    
     rewrite {
+        if {path} not_match ^\/(api\/.*)
         to {path} /
     }
+
+     proxy /api/ {$OFI_URL}
 }

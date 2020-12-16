@@ -33,4 +33,5 @@ jobs:
       - name: Webhook PROD
         if: ${{ github.ref != 'refs/heads/master' && github.ref != 'refs/head/dev' }}
         run: |
-          curl -X POST -H "Content-Type: application/json" -d '{ "env": [ { "name": "repository", "value": "${{github.event.repository.full_name}}"}, {"name": "commit", "value": "${{github.ref}}"} ] }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-prod-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.PROD_PIPE_TOKEN }}/generic
+          RELEASE_VERSION=${GITHUB_REF#refs/*/}
+          curl -X POST -H "Content-Type: application/json" -d '{ "env": [ { "name": "repository", "value": "${{github.event.repository.full_name}}"}, {"name": "commit", "value": "${{github.event.release.tag_name}}"} ] }' https://api.silver.devops.gov.bc.ca:6443/apis/build.openshift.io/v1/namespaces/dab7fb-tools/buildconfigs/ofi-prod-pipe-ocp-pipeline-deploy/webhooks/${{ secrets.PROD_PIPE_TOKEN }}/generic

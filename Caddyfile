@@ -2,7 +2,7 @@
 
 root * /app
 route /api/* {
-    uri strip_prefix /api
+    uri strip_prefix /api/
     rewrite * {$OFI_PATH}{path}?{query}
     reverse_proxy {
         to {$OFI_PROTO}{$OFI_URL}

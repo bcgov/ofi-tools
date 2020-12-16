@@ -11,7 +11,7 @@ RUN npm run build
 
 #Actual container
 
-FROM abiosoft/caddy:1.0.0-no-stats
+FROM caddy:2.1.1-alpine
 
 WORKDIR /app
 COPY --from=build-stage /app/dist /app
@@ -25,7 +25,7 @@ ENV NODE_ENV "production"
 EXPOSE 8080
 
 WORKDIR /etc
-COPY Caddyfile /etc/Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 COPY entrypoint.sh /etc/entrypoint.sh
 RUN chmod ugo+x /etc/entrypoint.sh
 ENTRYPOINT [ "/etc/entrypoint.sh" ]

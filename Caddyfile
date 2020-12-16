@@ -1,9 +1,18 @@
-*:8080 {
-    root /app
-    errors visible
-    #rewrite not /api/.* {path} /
+:8080
 
-    rewrite {
-        to {path} /
+root * /app
+route /api/* {
+    uri strip_prefix /api/
+    rewrite * {$OFI_PATH}{path}?{query}
+    reverse_proxy {
+        to {$OFI_PROTO}{$OFI_URL}
+        header_up Host {$OFI_URL}
+
+        transport http {
+            tls
+        }
+
     }
 }
+
+file_server

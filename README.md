@@ -1,5 +1,3 @@
-# code7
-
 ## Project setup
 ```
 npm install
